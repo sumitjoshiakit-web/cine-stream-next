@@ -1,64 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from 'storybook/test';
 import { MovieCard } from '../components/MovieCard';
-import { MOCK_MOVIES } from '../data/mockMovies';
+import type { Movie } from '../types';
 
-// This is the REAL MovieCard component used in the running app (app/page.tsx →
-// AppShell → MovieGrid → MovieCard) — rendered here fully decoupled from
-// Next.js routing/data-fetching, using mock data and mock callbacks instead.
-const sampleMovie = MOCK_MOVIES[0];
+const movie: Movie = {
+  id: 603,
+  title: 'The Matrix',
+  original_title: 'The Matrix',
+  poster_path: '/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg',
+  backdrop_path: '/icmmSD4vTTDKOq2vvdulafOGw93.jpg',
+  release_date: '1999-03-30',
+  vote_average: 8.2,
+  vote_count: 26000,
+  overview: 'A computer hacker discovers a hidden reality and joins a rebellion against its controllers.',
+  genre_ids: [28, 878],
+};
 
 const meta = {
-  title: 'App/MovieCard',
+  title: 'Core/MovieCard',
   component: MovieCard,
   tags: ['autodocs'],
-  parameters: {
-    layout: 'centered',
-  },
-  argTypes: {
-    isFavorite: {
-      control: 'boolean',
-      description: 'Whether the heart icon renders in its active ("favorited") state.',
-    },
-  },
+  parameters: { layout: 'centered' },
   args: {
-    movie: sampleMovie,
-    onToggleFavorite: fn(),
+    movie,
+    isFavorite: false,
+    onToggleFavorite: () => undefined,
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 220 }}>
-        <Story />
-      </div>
-    ),
-  ],
 } satisfies Meta<typeof MovieCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    isFavorite: false,
-  },
-};
-
-export const Favorited: Story = {
-  args: {
-    isFavorite: true,
-  },
-};
-
-export const HighlyRated: Story = {
-  args: {
-    movie: { ...sampleMovie, title: 'The Perfect Score', vote_average: 9.1, vote_count: 25000 },
-    isFavorite: false,
-  },
-};
-
-export const LowerRated: Story = {
-  args: {
-    movie: { ...sampleMovie, title: 'A Forgettable Sequel', vote_average: 4.3, vote_count: 120 },
-    isFavorite: false,
-  },
-};
+export const Default: Story = {};
+export const Favorite: Story = { args: { isFavorite: true } };
